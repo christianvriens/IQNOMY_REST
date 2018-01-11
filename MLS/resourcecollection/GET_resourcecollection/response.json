@@ -1,0 +1,158 @@
+[
+  {
+    "id": "85c5c680-f6c9-11e7-8c78-000c2981ebbe",
+    "name": "testIdObjecten",
+    "description": "object",
+    "resources": null,
+    "resourcePropertyDefinitions": [
+      {
+        "name": "type",
+        "type": "STRING",
+        "tags": [],
+        "indexed": true,
+        "idColumn": false,
+        "required": true
+      },
+      {
+        "name": "title.rendered",
+        "type": "STRING",
+        "tags": [
+          "description",
+          "name",
+          "url"
+        ],
+        "indexed": true,
+        "idColumn": false,
+        "required": true
+      },
+      {
+        "name": "map.geolocation",
+        "type": "GEOPOINT",
+        "tags": [],
+        "indexed": true,
+        "idColumn": false,
+        "required": false
+      },
+      {
+        "name": "slug",
+        "type": "STRING",
+        "tags": [],
+        "indexed": false,
+        "idColumn": false,
+        "required": true
+      },
+      {
+        "name": "id",
+        "type": "STRING",
+        "tags": [],
+        "indexed": true,
+        "idColumn": true,
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "be877550-f6c8-11e7-8c78-000c2981ebbe",
+    "name": "testIdObjecten",
+    "description": "object",
+    "resources": null,
+    "resourcePropertyDefinitions": [
+      {
+        "name": "type",
+        "type": "STRING",
+        "tags": [],
+        "indexed": true,
+        "idColumn": false,
+        "required": true
+      },
+      {
+        "name": "title.rendered",
+        "type": "STRING",
+        "tags": [
+          "description",
+          "name",
+          "url"
+        ],
+        "indexed": true,
+        "idColumn": false,
+        "required": true
+      },
+      {
+        "name": "map.geolocation",
+        "type": "GEOPOINT",
+        "tags": [],
+        "indexed": true,
+        "idColumn": false,
+        "required": false
+      },
+      {
+        "name": "slug",
+        "type": "STRING",
+        "tags": [],
+        "indexed": false,
+        "idColumn": false,
+        "required": true
+      },
+      {
+        "name": "id",
+        "type": "STRING",
+        "tags": [],
+        "indexed": true,
+        "idColumn": true,
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "43c2bcc0-f47b-11e7-8c78-000c2981ebbe",
+    "name": "testIdObjecten",
+    "description": "object",
+    "resources": null,
+    "resourcePropertyDefinitions": [
+      {
+        "name": "type",
+        "type": "STRING",
+        "tags": [],
+        "indexed": true,
+        "idColumn": false,
+        "required": true
+      },
+      {
+        "name": "title",
+        "type": "STRING",
+        "tags": [
+          "description",
+          "name",
+          "url"
+        ],
+        "indexed": true,
+        "idColumn": false,
+        "required": true
+      },
+      {
+        "name": "map.geolocation",
+        "type": "GEOPOINT",
+        "tags": [],
+        "indexed": true,
+        "idColumn": false,
+        "required": false
+      },
+      {
+        "name": "relations",
+        "type": "STRING",
+        "tags": [],
+        "indexed": false,
+        "idColumn": false,
+        "required": true
+      },
+      {
+        "name": "id",
+        "type": "STRING",
+        "tags": [],
+        "indexed": true,
+        "idColumn": true,
+        "required": true
+      }
+    ]
+  }
+]
