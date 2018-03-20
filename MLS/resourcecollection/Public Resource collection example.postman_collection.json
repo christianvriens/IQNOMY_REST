@@ -1,0 +1,1124 @@
+{
+	"info": {
+		"name": "Public Resource collection example",
+		"_postman_id": "7b0be3ee-d2d7-38ca-df48-54b3c1317f15",
+		"description": "With the LiquidAccount API you can access your Liquid Account data realtime, but you can also maintain several resources.\n\nTo use this API you must have access to a IQNOMY account with username and password. \n\nTo use this Postman collection:\n- create a local environment\n- fill in your IQNOMY account id as variable {{IQAccountId}}. This is used in the URL's\n\nAuthentication\nYour first post is Request offline token.\nFill in your username and password in the header. Do the post and you will get a token. This token is automaticly stored in your local environment.\n\nNow every 60 seconds you have to use MyLiquidSuite API - Grant Refresh. This will refresh the token.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth2",
+			"description": "",
+			"item": [
+				{
+					"name": "Request offline token copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accessToken\", data.access_token);",
+									"postman.setEnvironmentVariable(\"refreshToken\", data.refresh_token);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "iqnomy-paas",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{username}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{password}",
+									"type": "text"
+								},
+								{
+									"key": "scope",
+									"value": "offline_access",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://keycloak.iqnomy.com/auth/realms/IQNOMY/protocol/openid-connect/token",
+							"protocol": "https",
+							"host": [
+								"keycloak",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"IQNOMY",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "MyLiquidsuite API - Grant Refresh copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accessToken\", data.access_token);",
+									"postman.setEnvironmentVariable(\"refreshToken\", data.refresh_token);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "refresh_token",
+									"type": "text"
+								},
+								{
+									"key": "refresh_token",
+									"value": "{{refreshToken}}",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "iqnomy-paas",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://keycloak.iqnomy.com/auth/realms/IQNOMY/protocol/openid-connect/token",
+							"protocol": "https",
+							"host": [
+								"keycloak",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"IQNOMY",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "resourcecollection",
+			"description": "Folder for liquidaccount",
+			"item": [
+				{
+					"name": "Returns list of all resource collections",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// var jsonData = JSON.parse(responseBody);",
+									"// tests[\"Test if response is array\"] = Object.prototype.toString.call(jsonData) === '[object Array]';",
+									"// tests[\"Content-Type is present\"] = postman.getResponseHeader(\"Content-Type\");",
+									"// tests[\"Status code is 200\"] = responseCode.code === 200;",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// postman.setEnvironmentVariable(\"liquidAccountId\", \"157078931\");",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create a collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 201;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"New collection exists as an object\"] = Object.prototype.toString.call(jsonData) === '[object Object]';",
+									"",
+									"postman.setEnvironmentVariable(\"collectionId\", jsonData.id);",
+									"",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"testIdObjects\",\n  \"description\": \"object\",\n  \"resourcePropertyDefinitions\": [\n    {\n      \"name\": \"type\",\n      \"type\": \"STRING\",\n      \"idColumn\": false,\n      \"required\": true,\n      \"indexed\": true,\n      \"tags\": []\n    },\n    {\n      \"name\": \"title.rendered\",\n      \"type\": \"STRING\",\n      \"idColumn\": false,\n      \"required\": true,\n      \"indexed\": true,\n      \"tags\": [\n        \"description\",\n        \"name\",\n        \"url\"\n      ]\n    },\n    {\n      \"name\": \"map.geolocation\",\n      \"type\": \"GEOPOINT\",\n      \"idColumn\": false,\n      \"required\": false,\n      \"indexed\": true,\n      \"tags\": []\n    },\n    {\n      \"name\": \"slug\",\n      \"type\": \"STRING\",\n      \"idColumn\": false,\n      \"required\": true,\n      \"indexed\": false,\n      \"tags\": []\n    },\n    {\n      \"name\": \"id\",\n      \"type\": \"STRING\",\n      \"idColumn\": true,\n      \"required\": true,\n      \"indexed\": true,\n      \"tags\": null\n    }\n  ],\n  \"resources\": [\n    {\n      \"properties\": {\n        \"id\": 12832,\n        \"date\": \"2017-12-19T13:58:49\",\n        \"date_gmt\": \"2017-12-19T12:58:49\",\n        \"guid\": {\n          \"rendered\": \"http://www.humanswitch.io/?p=12832\"\n        },\n        \"modified\": \"2017-12-20T10:29:57\",\n        \"modified_gmt\": \"2017-12-20T09:29:57\",\n        \"slug\": \"banner-personalisatie-met-interesses-van-anonieme-webshop-bezoekers\",\n        \"status\": \"publish\",\n        \"type\": \"post\",\n        \"link\": \"https://www.humanswitch.io/blog/2017/12/19/banner-personalisatie-met-interesses-van-anonieme-webshop-bezoekers/\",\n        \"title\": {\n          \"rendered\": \"Banner personalisatie van anonieme webshop bezoekers\"\n        },\n        \"content\": {\n          \"rendered\": \"<h2>95% van je bezoekers is anoniem! En meestal is voor de online marketeer 100% van de webshop bezoekers anoniem tot het moment dat de koop wordt gesloten. Zou het niet mooi zijn als je de anonieme bezoeker toch kent. Het IQNOMY platform zorgt ervoor dat je ook anonieme bezoekers kunt helpen door de website optimaal voor ze in te richten met personalisatie.</h2>\\n<p>Bij personaliseren op je website zorg je ervoor dat content past bij de interesses van je bezoeker. Het aanpassen van een banner op basis van een interesse leidt al tot een<strong> 2x hogere CTR</strong> van deze banner. De bezoeker kan de juiste producten gemakkelijker vinden en de conversie zal hoger zijn. Hoe werkt dit?</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51.png\\\"><img class=\\\"alignnone wp-image-12842\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51.png\\\" alt=\\\"\\\" width=\\\"428\\\" height=\\\"303\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51.png 948w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51-300x213.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51-768x544.png 768w\\\" sizes=\\\"(max-width: 428px) 100vw, 428px\\\" /></a></p>\\n<p>Een bezoeker op de website wordt herkend op basis van een uniek nummer dat wordt opgeslagen in een cookie. De naam van de anonieme bezoeker is niet bekend, maar je kunt nu wel alle gebeurtenissen op de website registreren bij deze unieke bezoeker. Dit resulteert in een customer journey voor deze bezoeker. Al tijdens het eerste bezoek weet je al veel van deze bezoeker. Waar zit iemand in de verkoopfunnel, welke producten worden bekeken, wat wordt er in het winkelwagentje gestopt en wat zijn de producteigenschappen die deze bezoeker interessant vindt.</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28.png\\\"><img class=\\\"alignnone size-large wp-image-12852\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28-1024x159.png\\\" alt=\\\"\\\" width=\\\"640\\\" height=\\\"99\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28-1024x159.png 1024w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28-300x47.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28-768x119.png 768w\\\" sizes=\\\"(max-width: 640px) 100vw, 640px\\\" /></a></p>\\n<h1>Product interesses herkennen</h1>\\n<p>De bezoeker is vaak via een bepaalde campagne op de website gekomen en bezoekt daarna verschillende pagina&#8217;s op de website. We bekijken in dit voorbeeld een kleding webshop. Het is een webshop voor dames en heren kleding. Na één klik wordt al duidelijk dat deze persoon op zoek is naar dameskleding. Op onze supportpagina vind je een <a href=\\\"https://www.humanswitch.io/support/knowledgebase/product-interesses-configureren-iqnomy/\\\">voorbeeld case en demo voor het inrichten van deze interesses</a>.</p>\\n<p>Tijdens het bezoek worden de interesses duidelijk:</p>\\n<ul>\\n<li>Dameskleding</li>\\n<li>Trui</li>\\n<li>Sweat-shirt</li>\\n<li>V-hals</li>\\n<li>Kleur: Zwart</li>\\n<li>Merkvoorkeur</li>\\n<li>Prijscategorie: tot 30 euro</li>\\n</ul>\\n<p>Iedere unieke bezoeker in de webshop heeft een unieke combinatie van interesses. Deze interesses gebruik je om content aan te passen aan de bezoeker.</p>\\n<h1>Personaliseren met productinteresses</h1>\\n<p>Met deze data van anonieme bezoekers kun je verschillende vormen van personalisatie gaan toepassen.</p>\\n<ul>\\n<li>Banner personalisatie</li>\\n<li>Product recommendation</li>\\n<li><a href=\\\"http://www.humanswitch.io/blog/2017/09/11/plaats-gepersonaliseerde-lead-generatie-popup/\\\">Popup personalisatie</a></li>\\n<li><a href=\\\"http://www.humanswitch.io/blog/2017/03/17/personalisatie-toepassen-email-marketing/\\\">Email personalisatie</a></li>\\n</ul>\\n<p>Een banner personaliseren is vaak een eerste gemakkelijke stap in personalisatie. Met IQNOMY is het mogelijk om gepersonaliseerde banners te tonen. Technisch hoeft er niks te gebeuren. Het script dat je hebt geplaatst op de website om de bezoeker te volgen, verzorgt ook de personalisatie.  Via de rapportages in het IQNOMY platform krijg je een duidelijk beeld van de interesses van je bezoekers. De grootste groepen personaliseer je het eerste. Vaak is er al een banner beschikbaar voor deze locatie en deze kun je direct inzetten. Als er nog een banner gemaakt moet worden, dan kun je al starten met de reeds beschikbare banners en plaatst je de nieuwe banner er later gemakkelijk bij.</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-10.06.53.png\\\"><img class=\\\"alignnone wp-image-12862\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-10.06.53.png\\\" alt=\\\"\\\" width=\\\"284\\\" height=\\\"224\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-10.06.53.png 716w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-10.06.53-300x236.png 300w\\\" sizes=\\\"(max-width: 284px) 100vw, 284px\\\" /></a></p>\\n<p>Personalisatie op basis van de grootste categorie leidt al direct tot een hogere CTR en conversie. Gemiddeld leidt het personaliseren van de homepage banner tot een 2x hogere CTR en 1,3x hogere conversie via deze banner.</p>\\n<p>&nbsp;</p>\\n<hr style=\\\"color: #fc6d6d;\\\" />\\n<p><img class=\\\"alignleft wp-image-3121 size-thumbnail\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-150x150.jpg\\\" alt=\\\"Christian Vriens HumanSwitch IQNOMY\\\" width=\\\"150\\\" height=\\\"150\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-150x150.jpg 150w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-300x300.jpg 300w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-250x250.jpg 250w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-174x174.jpg 174w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2.jpg 960w\\\" sizes=\\\"(max-width: 150px) 100vw, 150px\\\" />Heb je vragen of wil je snel aan de slag met webshop personalisatie? Neem contact op met Christian Vriens om de mogelijkheden te bespreken.</p>\\n<p>Bel naar 0133031160 of mail naar <a href=\\\"mailto:christian@humanswitch.io\\\">christian@humanswitch.io</a></p>\\n<hr style=\\\"color: #fc6d6d;\\\" />\\n\",\n          \"protected\": false\n        },\n        \"excerpt\": {\n          \"rendered\": \"<p>95% van je bezoekers is anoniem! En meestal is voor de online marketeer 100% van de webshop bezoekers anoniem tot het moment dat de koop wordt gesloten. Zou het niet mooi zijn als je de anonieme bezoeker toch kent. Het IQNOMY platform zorgt ervoor dat je ook anonieme bezoekers kunt helpen door de website optimaal<a href=\\\"https://www.humanswitch.io/blog/2017/12/19/banner-personalisatie-met-interesses-van-anonieme-webshop-bezoekers/\\\">[&#8230;]</a></p>\\n\",\n          \"protected\": false\n        },\n        \"map\": {\n          \"geolocation\": {\n            \"lat\": 51.5877343,\n            \"lon\": 5.0048213\n          },\n          \"distance\": null,\n          \"zoomLevel\": 3\n        },\n        \"author\": 22,\n        \"featured_media\": 12842,\n        \"comment_status\": \"closed\",\n        \"ping_status\": \"closed\",\n        \"sticky\": false,\n        \"template\": \"\",\n        \"format\": \"standard\",\n        \"meta\": [],\n        \"categories\": [\n          183\n        ],\n        \"tags\": [],\n        \"_links\": {\n          \"self\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/12832\"\n            }\n          ],\n          \"collection\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts\"\n            }\n          ],\n          \"about\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/types/post\"\n            }\n          ],\n          \"author\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/users/22\"\n            }\n          ],\n          \"replies\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/comments?post=12832\"\n            }\n          ],\n          \"version-history\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/12832/revisions\"\n            }\n          ],\n          \"wp:featuredmedia\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media/12842\"\n            }\n          ],\n          \"wp:attachment\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media?parent=12832\"\n            }\n          ],\n          \"wp:term\": [\n            {\n              \"taxonomy\": \"category\",\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/categories?post=12832\"\n            },\n            {\n              \"taxonomy\": \"post_tag\",\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/tags?post=12832\"\n            }\n          ],\n          \"curies\": [\n            {\n              \"name\": \"wp\",\n              \"href\": \"https://api.w.org/{rel}\",\n              \"templated\": true\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"properties\": {\n        \"id\": 11822,\n        \"date\": \"2017-12-14T11:58:29\",\n        \"date_gmt\": \"2017-12-14T10:58:29\",\n        \"guid\": {\n          \"rendered\": \"http://www.humanswitch.io/?p=11822\"\n        },\n        \"modified\": \"2017-12-19T08:32:44\",\n        \"modified_gmt\": \"2017-12-19T07:32:44\",\n        \"slug\": \"resultaten-webshop-personalisatie-voor-email-marketing\",\n        \"status\": \"publish\",\n        \"type\": \"post\",\n        \"link\": \"https://www.humanswitch.io/blog/2017/12/14/resultaten-webshop-personalisatie-voor-email-marketing/\",\n        \"title\": {\n          \"rendered\": \"Resultaten webshop personalisatie voor email marketing\"\n        },\n        \"content\": {\n          \"rendered\": \"<h3>Je bent marketeer en in je webshop koopt 1,73% van je bezoekers. De advertentie inspanningen om mensen op te site te krijgen werpen hun vruchten af, 200.000 bezoekers, en de omzet groeit. Maar zou het niet fijn zijn om je conversie nog verder te verhogen? Dan herinner je de gouden marketing regel: het loyaliteits effect. &#8220;Het is gemakkelijker om een klant te behouden dan om een nieuwe klant te verkrijgen&#8221;.</h3>\\n<p>Zorg ervoor dat je een bezoeker van je website behoudt. De meeste mensen kopen niet tijdens hun eerste bezoek en keren ook niet terug. Van de 98,27% van de bezoekers die niet kopen is een groot deel een nieuwe bezoeker. Door meer bezoekers te laten terugkeren zal ook je conversie verhogen. Maar hoe verleidt je een nieuwe bezoeker om terug te keren? Personalisatie in combinatie met je email marketing!</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-14-at-09.54.28.png\\\"><img class=\\\"alignnone size-large wp-image-12642\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-14-at-09.54.28.png\\\" alt=\\\"\\\" width=\\\"384\\\" height=\\\"385\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-14-at-09.54.28.png 384w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-14-at-09.54.28-150x150.png 150w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-14-at-09.54.28-300x300.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-14-at-09.54.28-250x250.png 250w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-14-at-09.54.28-174x174.png 174w\\\" sizes=\\\"(max-width: 384px) 100vw, 384px\\\" /></a></p>\\n<h1>Personalisatie resulteert in terugkerende bezoekers</h1>\\n<p>Personalisatie is een belangrijke ontwikkeling die door marketeers wordt omarmt. Gewoon omdat het werkt! Door personalisatie op je website pas je content aan zodat deze er voor de ene bezoeker anders uitziet dan voor de andere. Product recommendation, popup verleidingen, aangepaste banners het zorgt er allemaal voor dat de bezoeker eerder verleidt wordt in de webshop. Door toepassing van het IQNOMY platform in je website wordt van iedere bezoeker een uniek profiel opgebouwd. Op basis van dit profiel vindt personalisatie plaats. Een van de personalisatie tactieken die wordt toegepast met het IQNOMY platform is in combinatie met je email marketing.</p>\\n<h2>Anonieme bezoekers omzetten naar bekende bezoekers</h2>\\n<p>Een belangrijke tactiek om een bezoeker te laten terugkeren is het inschrijven voor een nieuwsbrief. Nieuwe bezoekers zijn allemaal onbekende bezoekers, maar je hebt ze verleidt om naar de webshop te komen. En nu is de volgende stap om ze te verleiden om je marketing funnel in te stappen. Zorg ervoor dat een anonieme bezoeker zich bekend maakt door het achterlaten van zijn email adres.</p>\\n<p>Om iemand te verleiden moet je de juiste boodschap tonen. Hieronder staan twee voorbeelden. Je voelt natuurlijk al aan wat beter werkt:</p>\\n<p><em>&#8216;<span style=\\\"color: #0000ff;\\\">Schrijf je in voor onze nieuwsbrief</span>&#8216; </em>of <em>&#8216;<span style=\\\"color: #0000ff;\\\">10% korting op je eerste aankoop</span>&#8216;.</em></p>\\n<p>De korting resulteert in een hogere conversie, maar deze wil je alleen tonen aan nieuwe bezoekers. Dit is al een eerste stap in personalisatie. Door te herkennen of een bezoeker al eens heeft gekocht of een nieuwe bezoeker is. Om verder te personaliseren namen we als voorbeeld een dierenspeciaalzaak waarbij de interesse van de bezoeker in de personalisatie wordt verwerkt.</p>\\n<p><i><span style=\\\"color: #0000ff;\\\">Aanmelden kortingen kattenvoer</span> </i>en <em><span style=\\\"color: #0000ff;\\\">Aanmelden kortingen hondenvoer</span>. </em></p>\\n<p>Deze verleidingen worden alleen getoond als de interesse voor katten of honden wordt vastgesteld tijdens het bezoek en de bezoeker nog niet bekend is. Door de bezoeker een herkenbare interesse te tonen zal de conversie van deze verleiding nog hoger zijn.</p>\\n<h2>Email marketing verrijking</h2>\\n<p>Naast de verleiding tot inschrijving leidt dit ook tot verrijking van de email marketing database. In de emailmarketing maak je gebruik van dezelfde informatie. Een honden eigenaar krijgt meer informatie over honden aanbiedingen.</p>\\n<h1>Resultaten van personalisatie</h1>\\n<h2>Groter emailmarketing bereik</h2>\\n<p>In het voorbeeld van de dierenspeciaalzaak heeft de personalisatie een conversie stijging van <strong>2,1%</strong> naar <strong>7,0%</strong> gerealiseerd<strong>.</strong>  Door de toepassing van personalisatie wordt het bereik van de emailmarketing steeds groter. Als je meer mensen kunt bereiken via email marketing dan zullen er meer mensen via deze weg weer terugkeren op je website.</p>\\n<h2>Emails hogere conversie</h2>\\n<p>De conversie van de nieuwsbrief verhoogt ook door het toepassen van personalisatie. In deze case van <strong>1,6%</strong> naar <strong>2,5%</strong> en dus een aanzienlijk verschil. Je stuurt nu namelijk de juiste aanbiedingen naar de juiste mensen en daarmee wordt de nieuwsbrief interessanter.</p>\\n<h2>Resultaten na een jaar</h2>\\n<p>Door consequent deze verleiding toe te passen zal het aantal terugkerende bezoekers stijgen. Verschillende klanten van het IQNOMY platform hebben al geprofiteerd van de verleiding door personalisatie van nieuwe bezoekers. Het resultaat is een groter email marketing bereik en een hogere conversie. Van 30k inschrijvingen naar 100k. Het aantal terugkerende bezoekers kan hiermee stijgen van 40% naar 70%.</p>\\n<p>Nieuwe bezoekers zijn verleidt om zich te &#8216;binden&#8217; aan je webshop. Ze zijn geen nieuwe bezoekers meer, maar je houdt ze vast door middel van je emailmarketing. En terugkerende bezoekers zijn gemakkelijker te verleiden tot conversie. Van iedere terugkerende bezoeker heb je het interesse profiel al in beeld. Nu start je volgende stap in personalisatie. Zorg voor de juiste content!</p>\\n<hr style=\\\"color: #fc6d6d;\\\" />\\n<p><img class=\\\"alignleft wp-image-3121 size-thumbnail\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-150x150.jpg\\\" alt=\\\"Christian Vriens HumanSwitch IQNOMY\\\" width=\\\"150\\\" height=\\\"150\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-150x150.jpg 150w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-300x300.jpg 300w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-250x250.jpg 250w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-174x174.jpg 174w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2.jpg 960w\\\" sizes=\\\"(max-width: 150px) 100vw, 150px\\\" />Heb je vragen of wil je snel aan de slag met webshop personalisatie? Neem contact op met Christian Vriens om de mogelijkheden te bespreken.</p>\\n<p>Bel naar 0133031160 of mail naar <a href=\\\"mailto:christian@humanswitch.io\\\">christian@humanswitch.io</a></p>\\n<hr style=\\\"color: #fc6d6d;\\\" />\\n<p>&nbsp;</p>\\n\",\n          \"protected\": false\n        },\n        \"excerpt\": {\n          \"rendered\": \"<p>Je bent marketeer en in je webshop koopt 1,73% van je bezoekers. De advertentie inspanningen om mensen op te site te krijgen werpen hun vruchten af, 200.000 bezoekers, en de omzet groeit. Maar zou het niet fijn zijn om je conversie nog verder te verhogen? Dan herinner je de gouden marketing regel: het loyaliteits effect.<a href=\\\"https://www.humanswitch.io/blog/2017/12/14/resultaten-webshop-personalisatie-voor-email-marketing/\\\">[&#8230;]</a></p>\\n\",\n          \"protected\": false\n        },\n        \"author\": 22,\n        \"featured_media\": 4421,\n        \"comment_status\": \"open\",\n        \"ping_status\": \"open\",\n        \"sticky\": false,\n        \"template\": \"\",\n        \"format\": \"standard\",\n        \"meta\": [],\n        \"categories\": [\n          183\n        ],\n        \"tags\": [\n          51,\n          381\n        ],\n        \"_links\": {\n          \"self\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/11822\"\n            }\n          ],\n          \"collection\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts\"\n            }\n          ],\n          \"about\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/types/post\"\n            }\n          ],\n          \"author\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/users/22\"\n            }\n          ],\n          \"replies\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/comments?post=11822\"\n            }\n          ],\n          \"version-history\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/11822/revisions\"\n            }\n          ],\n          \"wp:featuredmedia\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media/4421\"\n            }\n          ],\n          \"wp:attachment\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media?parent=11822\"\n            }\n          ],\n          \"wp:term\": [\n            {\n              \"taxonomy\": \"category\",\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/categories?post=11822\"\n            },\n            {\n              \"taxonomy\": \"post_tag\",\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/tags?post=11822\"\n            }\n          ],\n          \"curies\": [\n            {\n              \"name\": \"wp\",\n              \"href\": \"https://api.w.org/{rel}\",\n              \"templated\": true\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"properties\": {\n        \"id\": 11882,\n        \"date\": \"2017-10-12T14:23:56\",\n        \"date_gmt\": \"2017-10-12T12:23:56\",\n        \"guid\": {\n          \"rendered\": \"http://www.humanswitch.io/?p=11882\"\n        },\n        \"modified\": \"2017-10-23T16:50:16\",\n        \"modified_gmt\": \"2017-10-23T14:50:16\",\n        \"slug\": \"lead-generatie-1-exit-popup\",\n        \"status\": \"publish\",\n        \"type\": \"post\",\n        \"link\": \"https://www.humanswitch.io/blog/2017/10/12/lead-generatie-1-exit-popup/\",\n        \"title\": {\n          \"rendered\": \"Lead generatie #1: Exit pop-up\"\n        },\n        \"content\": {\n          \"rendered\": \"<p>Ondanks de tijd, energie en geld dat in een website wordt gestoken komt 70% tot 96% van de bezoekers nooit meer terug zonder enige gegevens achter te laten. Email marketing wordt daarom ingezet om mensen terug te laten keren naar de website.</p>\\n<p>Maar hoe zorg je er nu voor dat bezoekers zich inschrijven? We hebben eerder dit jaar al een blog geschreven over <a href=\\\"http://www.humanswitch.io/verleid-bezoeker-email-pop-ups/\\\">verleid je bezoeker</a>. We hebben besloten om een serie van concrete cases hierover te presenteren. In deze blog: <strong>de exit pop-up</strong>.</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.10.39.png\\\"><img class=\\\"alignnone size-full wp-image-12111\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.10.39.png\\\" alt=\\\"\\\" width=\\\"470\\\" height=\\\"403\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.10.39.png 470w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.10.39-300x257.png 300w\\\" sizes=\\\"(max-width: 470px) 100vw, 470px\\\" /></a></p>\\n<h1 style=\\\"color: #fc6d6d; font-size: 3.8rem;\\\">Doel</h1>\\n<p>Het doel van de exit pop-up is om website verlaters te verleiden zich in te schrijven voor de nieuwsbrief.</p>\\n<p>Op het moment dat de bezoeker jouw website dreigt te verlaten (op basis van muisbewegingen) krijgt de bezoeker een vriendelijke gepersonaliseerde pop-up te zien. De pop-up nodigt de bezoeker uit om gegevens achter te laten.</p>\\n<h1 style=\\\"color: #fc6d6d; font-size: 3.8rem;\\\">Wat levert het op?</h1>\\n<ul>\\n<li>Verandert website verlaters in geregistreerde bezoekers.</li>\\n<li>Verhoogt het aantal nieuwsbrief inschrijvingen met 5% tot 30%. Iedere dag weer.</li>\\n<li>Bied in combinatie met de IQNOMY email marketing integratie de mogelijkheid voor persoonlijke email campagnes.</li>\\n<li>Vergroot je communicatie met je doelgroep.</li>\\n<li>Alleen bezoekers die zich nog niet hebben ingeschreven worden benaderd.</li>\\n</ul>\\n<h2>Aantal inschrijvingen per dag</h2>\\n<p><img class=\\\"size-full wp-image-12121 alignnone\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Popup-resultaten.png\\\" alt=\\\"\\\" width=\\\"862\\\" height=\\\"470\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Popup-resultaten.png 862w, https://www.humanswitch.io/wp-content/uploads/2017/10/Popup-resultaten-300x164.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/10/Popup-resultaten-768x419.png 768w\\\" sizes=\\\"(max-width: 862px) 100vw, 862px\\\" /></p>\\n<p>In de bovenstaande grafiek staan de inschrijvingen van een live case per dag. Vanaf het moment van live gaan zien we direct het resultaat van de exit pop-up. Ook andere lead generatie campagnes kunnen direct in beeld worden gebracht, waardoor je het verschil in toename ook direct inzichtelijk hebt. In de grafiek wordt voor het live gaan van de exit popup ook het resultaat van de nieuwsbrief inschrijving via de footer gemeten.</p>\\n<h1 style=\\\"color: #fc6d6d; font-size: 3.8rem;\\\">Implementatie stappen</h1>\\n<p>We hebben een aantal standaarden kant-en-klaar op de plank liggen. Het enige dat we dan nodig hebben is:</p>\\n<div>\\n<ul>\\n<li>Plaatje of url naar een achtergrondplaatje.</li>\\n<li>Landingspagina of tekst na inschrijven.</li>\\n<li>Verleidingstekst voor in pop-up</li>\\n</ul>\\n<p>Maak je gebruik van een bekende email marketing applicatie dan is de kans groot dat we reeds een standaard integratie hebben.</p>\\n</div>\\n<p>Wil je de pop-up volledig op maat laten dat kan ook. Wij kunnen een design partner vragen of standaard pop-up html aanleveren zodat deze bewerkt kan worden.</p>\\n<h2>Basiswerking</h2>\\n<p>Van een basiswerking kunnen we afwijken. Wellicht heb je andere ideeën of wil je iets uittesten? Maar in de basis gaan we bij een exit pop-up uit van:</p>\\n<ul>\\n<li>Eén keer tonen, niet meer tonen tijdens bezoek.</li>\\n<li>Tonen bij pagina verlaten.</li>\\n<li>Gecentreerd midden in het scherm.</li>\\n<li>Een overlay wordt gebruikt om interactie met andere pagina elementen te blokkeren.</li>\\n<li>Sluitknop om de pop-up weg te klikken.</li>\\n</ul>\\n<h2>Uiterlijk</h2>\\n<p>De pop-up kan verschillende uitingen bevatten waarmee je ook verschillende doelgroepen bereikt. Op deze manier kun je steeds efficiënter en effectiever de bezoeker verleiden.</p>\\n<h3>Naam, emailadres en privacy verwijzing</h3>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-12.57.49.png\\\"><img class=\\\"alignnone size-large wp-image-12151\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-12.57.49-1024x743.png\\\" alt=\\\"\\\" width=\\\"640\\\" height=\\\"464\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-12.57.49-1024x743.png 1024w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-12.57.49-300x218.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-12.57.49-768x557.png 768w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-12.57.49.png 1176w\\\" sizes=\\\"(max-width: 640px) 100vw, 640px\\\" /></a></p>\\n<p><a href=\\\"https://www.humanswitch.io/?iqprvw=16172%3A284631\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\">Bekijk live</a></p>\\n<h3>Hoe groot wil je de achtergrond</h3>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.57.58.png\\\"><img class=\\\"alignnone size-large wp-image-12181\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.57.58-1024x695.png\\\" alt=\\\"\\\" width=\\\"640\\\" height=\\\"434\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.57.58-1024x695.png 1024w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.57.58-300x203.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.57.58-768x521.png 768w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.57.58.png 1147w\\\" sizes=\\\"(max-width: 640px) 100vw, 640px\\\" /></a></p>\\n<p><a href=\\\"https://www.humanswitch.io/?iqprvw=16172%3A284711\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\">Bekijk live</a></p>\\n<h3>Verschillende talen?</h3>\\n<p><a href=\\\"https://www.humanswitch.io/?iqprvw=16172%3A284641\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\">Nederlands</a> vs <a href=\\\"https://www.humanswitch.io/?iqprvw=16172%3A284651\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\">Frans</a>? Pas de problème. Veel klanten van ons hebben websites in verschillende talen. Of in België een website met twee talen. De pop-ups zijn hier zo ingericht dat iedere bezoeker de pop-up in de juiste taal te zien krijgt.</p>\\n<h1 style=\\\"color: #fc6d6d; font-size: 3.8rem;\\\">Optimaliseren = personaliseren!</h1>\\n<p>Ons advies: Begin eerst met een algemene exit pop-up en zet deze meteen live. Start daarna pas met de volgende om de personalisatie zo stap voor stap steeds verder te verfijnen. In dit proces kunnen we je begeleiden en adviseren.</p>\\n<h2>Vergelijk resultaten direct</h2>\\n<p>Het belangrijkste is dat je de resultaten van je verschillende campagnes direct kunt vergelijken. Op basis hiervan kun je gemakkelijk beslissingen maken om campagnes te optimaliseren door personalisatie.</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.56.04.png\\\"><img class=\\\"alignnone size-large wp-image-12171\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.56.04-1024x299.png\\\" alt=\\\"\\\" width=\\\"640\\\" height=\\\"187\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.56.04-1024x299.png 1024w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.56.04-300x88.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.56.04-768x224.png 768w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.56.04.png 1322w\\\" sizes=\\\"(max-width: 640px) 100vw, 640px\\\" /></a></p>\\n<p>Ons dashboard helpt je door direct de resultaten te tonen en automatisch te signaleren als een campagne geen resultaat oplevert.</p>\\n<hr style=\\\"color: #fc6d6d;\\\" />\\n<p><img class=\\\"alignleft wp-image-3121 size-thumbnail\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-150x150.jpg\\\" alt=\\\"Christian Vriens HumanSwitch IQNOMY\\\" width=\\\"150\\\" height=\\\"150\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-150x150.jpg 150w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-300x300.jpg 300w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-250x250.jpg 250w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-174x174.jpg 174w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2.jpg 960w\\\" sizes=\\\"(max-width: 150px) 100vw, 150px\\\" />Heb je vragen of wil je snel aan de slag met de exit pop-up? Neem contact op met Christian Vriens om gratis en vrijblijvend de mogelijkheden te bespreken.</p>\\n<p>Bel naar 0133031160 of mail naar <a href=\\\"mailto:christian@humanswitch.io\\\">christian@humanswitch.io</a></p>\\n<hr style=\\\"color: #fc6d6d;\\\" />\\n\",\n          \"protected\": false\n        },\n        \"excerpt\": {\n          \"rendered\": \"<p>Ondanks de tijd, energie en geld dat in een website wordt gestoken komt 70% tot 96% van de bezoekers nooit meer terug zonder enige gegevens achter te laten. Email marketing wordt daarom ingezet om mensen terug te laten keren naar de website. Maar hoe zorg je er nu voor dat bezoekers zich inschrijven? We hebben<a href=\\\"https://www.humanswitch.io/blog/2017/10/12/lead-generatie-1-exit-popup/\\\">[&#8230;]</a></p>\\n\",\n          \"protected\": false\n        },\n        \"author\": 22,\n        \"featured_media\": 12111,\n        \"comment_status\": \"open\",\n        \"ping_status\": \"open\",\n        \"sticky\": false,\n        \"template\": \"\",\n        \"format\": \"standard\",\n        \"meta\": [],\n        \"categories\": [\n          183,\n          512\n        ],\n        \"tags\": [\n          51,\n          552,\n          411\n        ],\n        \"_links\": {\n          \"self\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/11882\"\n            }\n          ],\n          \"collection\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts\"\n            }\n          ],\n          \"about\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/types/post\"\n            }\n          ],\n          \"author\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/users/22\"\n            }\n          ],\n          \"replies\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/comments?post=11882\"\n            }\n          ],\n          \"version-history\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/11882/revisions\"\n            }\n          ],\n          \"wp:featuredmedia\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media/12111\"\n            }\n          ],\n          \"wp:attachment\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media?parent=11882\"\n            }\n          ],\n          \"wp:term\": [\n            {\n              \"taxonomy\": \"category\",\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/categories?post=11882\"\n            },\n            {\n              \"taxonomy\": \"post_tag\",\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/tags?post=11882\"\n            }\n          ],\n          \"curies\": [\n            {\n              \"name\": \"wp\",\n              \"href\": \"https://api.w.org/{rel}\",\n              \"templated\": true\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"properties\": {\n        \"id\": 11792,\n        \"date\": \"2017-09-11T10:51:08\",\n        \"date_gmt\": \"2017-09-11T08:51:08\",\n        \"guid\": {\n          \"rendered\": \"http://www.humanswitch.io/?p=11792\"\n        },\n        \"modified\": \"2017-09-11T10:54:56\",\n        \"modified_gmt\": \"2017-09-11T08:54:56\",\n        \"slug\": \"gebruik-verschillende-lead-generation-campagnes\",\n        \"status\": \"publish\",\n        \"type\": \"post\",\n        \"link\": \"https://www.humanswitch.io/blog/2017/09/11/gebruik-verschillende-lead-generation-campagnes/\",\n        \"title\": {\n          \"rendered\": \"Gebruik verschillende lead generation campagnes\"\n        },\n        \"content\": {\n          \"rendered\": \"<p>De volgende lead generatie campagnes worden veel toegepast:</p>\\n<ul>\\n<li>Bij een contactformulier een &#8216;nieuwsbrief aanmeld&#8217; vinkje</li>\\n<li>In de verkoopformulieren een &#8216;aanmeld&#8217; mogelijkheid.</li>\\n<li>In de footer van iedere pagina</li>\\n<li>Bij een artikel of blog de mogelijkheid om op de hoogte te blijven</li>\\n<li>Een popup bij website verlaten, eerste bezoek of 2e pagina</li>\\n</ul>\\n\",\n          \"protected\": false\n        },\n        \"excerpt\": {\n          \"rendered\": \"<p>De volgende lead generatie campagnes worden veel toegepast: Bij een contactformulier een &#8216;nieuwsbrief aanmeld&#8217; vinkje In de verkoopformulieren een &#8216;aanmeld&#8217; mogelijkheid. In de footer van iedere pagina Bij een artikel of blog de mogelijkheid om op de hoogte te blijven Een popup bij website verlaten, eerste bezoek of 2e pagina</p>\\n\",\n          \"protected\": false\n        },\n        \"author\": 22,\n        \"featured_media\": 0,\n        \"comment_status\": \"open\",\n        \"ping_status\": \"open\",\n        \"sticky\": false,\n        \"template\": \"\",\n        \"format\": \"standard\",\n        \"meta\": [],\n        \"categories\": [\n          532\n        ],\n        \"tags\": [],\n        \"_links\": {\n          \"self\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/11792\"\n            }\n          ],\n          \"collection\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts\"\n            }\n          ],\n          \"about\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/types/post\"\n            }\n          ],\n          \"author\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/users/22\"\n            }\n          ],\n          \"replies\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/comments?post=11792\"\n            }\n          ],\n          \"version-history\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/11792/revisions\"\n            }\n          ],\n          \"wp:attachment\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media?parent=11792\"\n            }\n          ],\n          \"wp:term\": [\n            {\n              \"taxonomy\": \"category\",\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/categories?post=11792\"\n            },\n            {\n              \"taxonomy\": \"post_tag\",\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/tags?post=11792\"\n            }\n          ],\n          \"curies\": [\n            {\n              \"name\": \"wp\",\n              \"href\": \"https://api.w.org/{rel}\",\n              \"templated\": true\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"properties\": {\n        \"id\": 11772,\n        \"date\": \"2017-09-11T10:46:26\",\n        \"date_gmt\": \"2017-09-11T08:46:26\",\n        \"guid\": {\n          \"rendered\": \"http://www.humanswitch.io/?p=11772\"\n        },\n        \"modified\": \"2017-09-11T10:54:45\",\n        \"modified_gmt\": \"2017-09-11T08:54:45\",\n        \"slug\": \"plaats-gepersonaliseerde-lead-generatie-popup\",\n        \"status\": \"publish\",\n        \"type\": \"post\",\n        \"link\": \"https://www.humanswitch.io/blog/2017/09/11/plaats-gepersonaliseerde-lead-generatie-popup/\",\n        \"title\": {\n          \"rendered\": \"Plaats een gepersonaliseerde lead generatie popup\"\n        },\n        \"content\": {\n          \"rendered\": \"<p>Een popup die bezoekers verleidt tot het achterlaten van hun email adres leidt tot hoge resultaten. Als je via de footer momenteel 10 inschrijvingen per dag ontvangt, dan zal dit met een popup zo&#8217;n 40 inschrijvingen worden. Een 4x zo hoog resultaat!</p>\\n\",\n          \"protected\": false\n        },\n        \"excerpt\": {\n          \"rendered\": \"<p>Een popup die bezoekers verleidt tot het achterlaten van hun email adres leidt tot hoge resultaten. Als je via de footer momenteel 10 inschrijvingen per dag ontvangt, dan zal dit met een popup zo&#8217;n 40 inschrijvingen worden. Een 4x zo hoog resultaat!</p>\\n\",\n          \"protected\": false\n        },\n        \"author\": 22,\n        \"featured_media\": 0,\n        \"comment_status\": \"open\",\n        \"ping_status\": \"open\",\n        \"sticky\": false,\n        \"template\": \"\",\n        \"format\": \"standard\",\n        \"meta\": [],\n        \"categories\": [\n          532\n        ],\n        \"tags\": [\n          51,\n          552\n        ],\n        \"_links\": {\n          \"self\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/11772\"\n            }\n          ],\n          \"collection\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts\"\n            }\n          ],\n          \"about\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/types/post\"\n            }\n          ],\n          \"author\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/users/22\"\n            }\n          ],\n          \"replies\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/comments?post=11772\"\n            }\n          ],\n          \"version-history\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/11772/revisions\"\n            }\n          ],\n          \"wp:attachment\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media?parent=11772\"\n            }\n          ],\n          \"wp:term\": [\n            {\n              \"taxonomy\": \"category\",\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/categories?post=11772\"\n            },\n            {\n              \"taxonomy\": \"post_tag\",\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/tags?post=11772\"\n            }\n          ],\n          \"curies\": [\n            {\n              \"name\": \"wp\",\n              \"href\": \"https://api.w.org/{rel}\",\n              \"templated\": true\n            }\n          ]\n        }\n      }\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Returns a collection with resources",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test if resources in response is array\"] = Object.prototype.toString.call(jsonData.resources) === '[object Array]';",
+									"tests[\"Test if number of resources is 5\"] = jsonData.resources.length === 5;",
+									"postman.setEnvironmentVariable(\"amountOfResources\", jsonData.resources.length);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"postman.setEnvironmentVariable(\"includeResources\", \"true\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}?includeResources={{includeResources}}",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}"
+							],
+							"query": [
+								{
+									"key": "includeResources",
+									"value": "{{includeResources}}",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Returns a collection without resources",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test if resources property exists\"] = jsonData.hasOwnProperty('resources') === true",
+									"tests[\"Test if resources in response is null\"] = jsonData.resources === null;",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"//postman.setGlobalVariable(\"LiquidAccountId\", \"5\");",
+									"//postman.setEnvironmentVariable(\"collectionId\", \"85362af0-5c9d-11e7-a79f-000c2981ebbe\");",
+									"",
+									"postman.setEnvironmentVariable(\"includeResources\", \"false\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}?includeResources={{includeResources}}",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}"
+							],
+							"query": [
+								{
+									"key": "includeResources",
+									"value": "{{includeResources}}",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update a collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 204\"] = responseCode.code === 204;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"testIdObjects\",\n  \"description\": \"object\",\n  \"resourcePropertyDefinitions\": [\n    {\n      \"name\": \"type\",\n      \"type\": \"STRING\",\n      \"idColumn\": false,\n      \"required\": true,\n      \"indexed\": true,\n      \"tags\": []\n    },\n    {\n      \"name\": \"title.rendered\",\n      \"type\": \"STRING\",\n      \"idColumn\": false,\n      \"required\": true,\n      \"indexed\": true,\n      \"tags\": [\n        \"description\",\n        \"name\",\n        \"url\"\n      ]\n    },\n    {\n      \"name\": \"map.geolocation\",\n      \"type\": \"GEOPOINT\",\n      \"idColumn\": false,\n      \"required\": false,\n      \"indexed\": true,\n      \"tags\": []\n    },\n    {\n      \"name\": \"slug\",\n      \"type\": \"STRING\",\n      \"idColumn\": false,\n      \"required\": true,\n      \"indexed\": false,\n      \"tags\": []\n    },\n    {\n      \"name\": \"id\",\n      \"type\": \"STRING\",\n      \"idColumn\": true,\n      \"required\": true,\n      \"indexed\": true,\n      \"tags\": null\n    }\n  ],\n  \"resources\": [\n        {\n            \"id\": \"11882\",\n            \"properties\": {\n                \"id\": 11882,\n                \"date\": \"2017-10-12T14:23:56\",\n                \"date_gmt\": \"2017-10-12T12:23:56\",\n                \"guid\": {\n                    \"rendered\": \"http://www.humanswitch.io/?p=11882\"\n                },\n                \"modified\": \"2017-10-23T16:50:16\",\n                \"modified_gmt\": \"2017-10-23T14:50:16\",\n                \"slug\": \"lead-generatie-1-exit-popup\",\n                \"status\": \"publish\",\n                \"type\": \"post\",\n                \"link\": \"https://www.humanswitch.io/blog/2017/10/12/lead-generatie-1-exit-popup/\",\n                \"title\": {\n                    \"rendered\": \"Lead generatie #1: Exit pop-up\"\n                },\n                \"content\": {\n                    \"rendered\": \"<p>Ondanks de tijd, energie en geld dat in een website wordt gestoken komt 70% tot 96% van de bezoekers nooit meer terug zonder enige gegevens achter te laten. Email marketing wordt daarom ingezet om mensen terug te laten keren naar de website.</p>\\n<p>Maar hoe zorg je er nu voor dat bezoekers zich inschrijven? We hebben eerder dit jaar al een blog geschreven over <a href=\\\"http://www.humanswitch.io/verleid-bezoeker-email-pop-ups/\\\">verleid je bezoeker</a>. We hebben besloten om een serie van concrete cases hierover te presenteren. In deze blog: <strong>de exit pop-up</strong>.</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.10.39.png\\\"><img class=\\\"alignnone size-full wp-image-12111\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.10.39.png\\\" alt=\\\"\\\" width=\\\"470\\\" height=\\\"403\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.10.39.png 470w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.10.39-300x257.png 300w\\\" sizes=\\\"(max-width: 470px) 100vw, 470px\\\" /></a></p>\\n<h1 style=\\\"color: #fc6d6d; font-size: 3.8rem;\\\">Doel</h1>\\n<p>Het doel van de exit pop-up is om website verlaters te verleiden zich in te schrijven voor de nieuwsbrief.</p>\\n<p>Op het moment dat de bezoeker jouw website dreigt te verlaten (op basis van muisbewegingen) krijgt de bezoeker een vriendelijke gepersonaliseerde pop-up te zien. De pop-up nodigt de bezoeker uit om gegevens achter te laten.</p>\\n<h1 style=\\\"color: #fc6d6d; font-size: 3.8rem;\\\">Wat levert het op?</h1>\\n<ul>\\n<li>Verandert website verlaters in geregistreerde bezoekers.</li>\\n<li>Verhoogt het aantal nieuwsbrief inschrijvingen met 5% tot 30%. Iedere dag weer.</li>\\n<li>Bied in combinatie met de IQNOMY email marketing integratie de mogelijkheid voor persoonlijke email campagnes.</li>\\n<li>Vergroot je communicatie met je doelgroep.</li>\\n<li>Alleen bezoekers die zich nog niet hebben ingeschreven worden benaderd.</li>\\n</ul>\\n<h2>Aantal inschrijvingen per dag</h2>\\n<p><img class=\\\"size-full wp-image-12121 alignnone\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Popup-resultaten.png\\\" alt=\\\"\\\" width=\\\"862\\\" height=\\\"470\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Popup-resultaten.png 862w, https://www.humanswitch.io/wp-content/uploads/2017/10/Popup-resultaten-300x164.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/10/Popup-resultaten-768x419.png 768w\\\" sizes=\\\"(max-width: 862px) 100vw, 862px\\\" /></p>\\n<p>In de bovenstaande grafiek staan de inschrijvingen van een live case per dag. Vanaf het moment van live gaan zien we direct het resultaat van de exit pop-up. Ook andere lead generatie campagnes kunnen direct in beeld worden gebracht, waardoor je het verschil in toename ook direct inzichtelijk hebt. In de grafiek wordt voor het live gaan van de exit popup ook het resultaat van de nieuwsbrief inschrijving via de footer gemeten.</p>\\n<h1 style=\\\"color: #fc6d6d; font-size: 3.8rem;\\\">Implementatie stappen</h1>\\n<p>We hebben een aantal standaarden kant-en-klaar op de plank liggen. Het enige dat we dan nodig hebben is:</p>\\n<div>\\n<ul>\\n<li>Plaatje of url naar een achtergrondplaatje.</li>\\n<li>Landingspagina of tekst na inschrijven.</li>\\n<li>Verleidingstekst voor in pop-up</li>\\n</ul>\\n<p>Maak je gebruik van een bekende email marketing applicatie dan is de kans groot dat we reeds een standaard integratie hebben.</p>\\n</div>\\n<p>Wil je de pop-up volledig op maat laten dat kan ook. Wij kunnen een design partner vragen of standaard pop-up html aanleveren zodat deze bewerkt kan worden.</p>\\n<h2>Basiswerking</h2>\\n<p>Van een basiswerking kunnen we afwijken. Wellicht heb je andere ideeën of wil je iets uittesten? Maar in de basis gaan we bij een exit pop-up uit van:</p>\\n<ul>\\n<li>Eén keer tonen, niet meer tonen tijdens bezoek.</li>\\n<li>Tonen bij pagina verlaten.</li>\\n<li>Gecentreerd midden in het scherm.</li>\\n<li>Een overlay wordt gebruikt om interactie met andere pagina elementen te blokkeren.</li>\\n<li>Sluitknop om de pop-up weg te klikken.</li>\\n</ul>\\n<h2>Uiterlijk</h2>\\n<p>De pop-up kan verschillende uitingen bevatten waarmee je ook verschillende doelgroepen bereikt. Op deze manier kun je steeds efficiënter en effectiever de bezoeker verleiden.</p>\\n<h3>Naam, emailadres en privacy verwijzing</h3>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-12.57.49.png\\\"><img class=\\\"alignnone size-large wp-image-12151\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-12.57.49-1024x743.png\\\" alt=\\\"\\\" width=\\\"640\\\" height=\\\"464\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-12.57.49-1024x743.png 1024w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-12.57.49-300x218.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-12.57.49-768x557.png 768w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-12.57.49.png 1176w\\\" sizes=\\\"(max-width: 640px) 100vw, 640px\\\" /></a></p>\\n<p><a href=\\\"https://www.humanswitch.io/?iqprvw=16172%3A284631\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\">Bekijk live</a></p>\\n<h3>Hoe groot wil je de achtergrond</h3>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.57.58.png\\\"><img class=\\\"alignnone size-large wp-image-12181\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.57.58-1024x695.png\\\" alt=\\\"\\\" width=\\\"640\\\" height=\\\"434\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.57.58-1024x695.png 1024w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.57.58-300x203.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.57.58-768x521.png 768w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.57.58.png 1147w\\\" sizes=\\\"(max-width: 640px) 100vw, 640px\\\" /></a></p>\\n<p><a href=\\\"https://www.humanswitch.io/?iqprvw=16172%3A284711\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\">Bekijk live</a></p>\\n<h3>Verschillende talen?</h3>\\n<p><a href=\\\"https://www.humanswitch.io/?iqprvw=16172%3A284641\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\">Nederlands</a> vs <a href=\\\"https://www.humanswitch.io/?iqprvw=16172%3A284651\\\" target=\\\"_blank\\\" rel=\\\"noopener\\\">Frans</a>? Pas de problème. Veel klanten van ons hebben websites in verschillende talen. Of in België een website met twee talen. De pop-ups zijn hier zo ingericht dat iedere bezoeker de pop-up in de juiste taal te zien krijgt.</p>\\n<h1 style=\\\"color: #fc6d6d; font-size: 3.8rem;\\\">Optimaliseren = personaliseren!</h1>\\n<p>Ons advies: Begin eerst met een algemene exit pop-up en zet deze meteen live. Start daarna pas met de volgende om de personalisatie zo stap voor stap steeds verder te verfijnen. In dit proces kunnen we je begeleiden en adviseren.</p>\\n<h2>Vergelijk resultaten direct</h2>\\n<p>Het belangrijkste is dat je de resultaten van je verschillende campagnes direct kunt vergelijken. Op basis hiervan kun je gemakkelijk beslissingen maken om campagnes te optimaliseren door personalisatie.</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.56.04.png\\\"><img class=\\\"alignnone size-large wp-image-12171\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.56.04-1024x299.png\\\" alt=\\\"\\\" width=\\\"640\\\" height=\\\"187\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.56.04-1024x299.png 1024w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.56.04-300x88.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.56.04-768x224.png 768w, https://www.humanswitch.io/wp-content/uploads/2017/10/Screen-Shot-2017-10-12-at-13.56.04.png 1322w\\\" sizes=\\\"(max-width: 640px) 100vw, 640px\\\" /></a></p>\\n<p>Ons dashboard helpt je door direct de resultaten te tonen en automatisch te signaleren als een campagne geen resultaat oplevert.</p>\\n<hr style=\\\"color: #fc6d6d;\\\" />\\n<p><img class=\\\"alignleft wp-image-3121 size-thumbnail\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-150x150.jpg\\\" alt=\\\"Christian Vriens HumanSwitch IQNOMY\\\" width=\\\"150\\\" height=\\\"150\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-150x150.jpg 150w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-300x300.jpg 300w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-250x250.jpg 250w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-174x174.jpg 174w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2.jpg 960w\\\" sizes=\\\"(max-width: 150px) 100vw, 150px\\\" />Heb je vragen of wil je snel aan de slag met de exit pop-up? Neem contact op met Christian Vriens om gratis en vrijblijvend de mogelijkheden te bespreken.</p>\\n<p>Bel naar 0133031160 of mail naar <a href=\\\"mailto:christian@humanswitch.io\\\">christian@humanswitch.io</a></p>\\n<hr style=\\\"color: #fc6d6d;\\\" />\\n\",\n                    \"protected\": false\n                },\n                \"excerpt\": {\n                    \"rendered\": \"<p>Ondanks de tijd, energie en geld dat in een website wordt gestoken komt 70% tot 96% van de bezoekers nooit meer terug zonder enige gegevens achter te laten. Email marketing wordt daarom ingezet om mensen terug te laten keren naar de website. Maar hoe zorg je er nu voor dat bezoekers zich inschrijven? We hebben<a href=\\\"https://www.humanswitch.io/blog/2017/10/12/lead-generatie-1-exit-popup/\\\">[&#8230;]</a></p>\\n\",\n                    \"protected\": false\n                },\n                \"author\": 22,\n                \"featured_media\": 12111,\n                \"comment_status\": \"open\",\n                \"ping_status\": \"open\",\n                \"sticky\": false,\n                \"template\": \"\",\n                \"format\": \"standard\",\n                \"meta\": [],\n                \"categories\": [\n                    183,\n                    512\n                ],\n                \"tags\": [\n                    51,\n                    552,\n                    411\n                ],\n                \"_links\": {\n                    \"self\": [\n                        {\n                            \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/11882\"\n                        }\n                    ],\n                    \"collection\": [\n                        {\n                            \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts\"\n                        }\n                    ],\n                    \"about\": [\n                        {\n                            \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/types/post\"\n                        }\n                    ],\n                    \"author\": [\n                        {\n                            \"embeddable\": true,\n                            \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/users/22\"\n                        }\n                    ],\n                    \"replies\": [\n                        {\n                            \"embeddable\": true,\n                            \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/comments?post=11882\"\n                        }\n                    ],\n                    \"version-history\": [\n                        {\n                            \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/11882/revisions\"\n                        }\n                    ],\n                    \"wp:featuredmedia\": [\n                        {\n                            \"embeddable\": true,\n                            \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media/12111\"\n                        }\n                    ],\n                    \"wp:attachment\": [\n                        {\n                            \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media?parent=11882\"\n                        }\n                    ],\n                    \"wp:term\": [\n                        {\n                            \"taxonomy\": \"category\",\n                            \"embeddable\": true,\n                            \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/categories?post=11882\"\n                        },\n                        {\n                            \"taxonomy\": \"post_tag\",\n                            \"embeddable\": true,\n                            \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/tags?post=11882\"\n                        }\n                    ],\n                    \"curies\": [\n                        {\n                            \"name\": \"wp\",\n                            \"href\": \"https://api.w.org/{rel}\",\n                            \"templated\": true\n                        }\n                    ]\n                }\n            }\n        }\n  ]\n}"
+						},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}"
+							]
+						},
+						"description": "Put request with part of the resources. Left out from the original post resource with id 18608 and introducing a new resource with id 23232324. The other resources from the original post are also in this put. \n\nExpecting:\n* create resource 23232324\n* not deleting resource 18608\n* editing resource 18605"
+					},
+					"response": []
+				},
+				{
+					"name": "Check if put result is saved",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test if resources in response is array\"] = Object.prototype.toString.call(jsonData.resources) === '[object Array]';",
+									"tests[\"Test if number of resources is 6\"] = jsonData.resources.length === 6;",
+									"",
+									"var test1 = false;",
+									"var test2 = false;",
+									"var test3 = false;",
+									"",
+									"",
+									"for(var i = 0; i<jsonData.resources.length;i++){",
+									"    if(jsonData.resources[i].id == \"18605\"){",
+									"        postman.setEnvironmentVariable(\"resources\", jsonData.resources[i].id);",
+									"        postman.setEnvironmentVariable(\"resourceType\", jsonData.resources[i].properties.type);",
+									"        if(jsonData.resources[i].properties.type ===\"DeltaProject this is an edited\"){",
+									"                    test1 = true;",
+									"        }",
+									"    }",
+									"    if(jsonData.resources[i].id == \"18608\"){",
+									"        test2 = true;",
+									"    }",
+									"    if(jsonData.resources[i].id == \"232323232324\"){",
+									"        test3 = true;",
+									"    }",
+									"",
+									"}",
+									"tests[\"Test if resource with id 18605 type is edited\"] = test1;",
+									"tests[\"Test if resource with id 18608 type is not deleted\"] = test2;         ",
+									"tests[\"Test if resource with id 232323232324 type is created\"] = test3;",
+									"",
+									""
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"postman.setEnvironmentVariable(\"includeResources\", \"true\");"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}?includeResources={{includeResources}}",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}"
+							],
+							"query": [
+								{
+									"key": "includeResources",
+									"value": "{{includeResources}}",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Returns list of all resources",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Test if number of resources is 6\"] = jsonData.length === 6;",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}/resource",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}",
+								"resource"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create a resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 201;",
+									"",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"resourceId\", jsonData.id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\t\"id\":null,\n      \"properties\": {\n        \"id\": 12901,\n        \"date\": \"2017-12-19T13:58:49\",\n        \"date_gmt\": \"2017-12-19T12:58:49\",\n        \"guid\": {\n          \"rendered\": \"http://www.humanswitch.io/?p=12832\"\n        },\n        \"modified\": \"2017-12-20T10:29:57\",\n        \"modified_gmt\": \"2017-12-20T09:29:57\",\n        \"slug\": \"banner-personalisatie-met-interesses-van-anonieme-webshop-bezoekers\",\n        \"status\": \"publish\",\n        \"type\": \"post\",\n        \"link\": \"https://www.humanswitch.io/blog/2017/12/19/banner-personalisatie-met-interesses-van-anonieme-webshop-bezoekers/\",\n        \"title\": {\n          \"rendered\": \"Banner personalisatie van anonieme webshop bezoekers\"\n        },\n        \"content\": {\n          \"rendered\": \"<h2>95% van je bezoekers is anoniem! En meestal is voor de online marketeer 100% van de webshop bezoekers anoniem tot het moment dat de koop wordt gesloten. Zou het niet mooi zijn als je de anonieme bezoeker toch kent. Het IQNOMY platform zorgt ervoor dat je ook anonieme bezoekers kunt helpen door de website optimaal voor ze in te richten met personalisatie.</h2>\\n<p>Bij personaliseren op je website zorg je ervoor dat content past bij de interesses van je bezoeker. Het aanpassen van een banner op basis van een interesse leidt al tot een<strong> 2x hogere CTR</strong> van deze banner. De bezoeker kan de juiste producten gemakkelijker vinden en de conversie zal hoger zijn. Hoe werkt dit?</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51.png\\\"><img class=\\\"alignnone wp-image-12842\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51.png\\\" alt=\\\"\\\" width=\\\"428\\\" height=\\\"303\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51.png 948w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51-300x213.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51-768x544.png 768w\\\" sizes=\\\"(max-width: 428px) 100vw, 428px\\\" /></a></p>\\n<p>Een bezoeker op de website wordt herkend op basis van een uniek nummer dat wordt opgeslagen in een cookie. De naam van de anonieme bezoeker is niet bekend, maar je kunt nu wel alle gebeurtenissen op de website registreren bij deze unieke bezoeker. Dit resulteert in een customer journey voor deze bezoeker. Al tijdens het eerste bezoek weet je al veel van deze bezoeker. Waar zit iemand in de verkoopfunnel, welke producten worden bekeken, wat wordt er in het winkelwagentje gestopt en wat zijn de producteigenschappen die deze bezoeker interessant vindt.</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28.png\\\"><img class=\\\"alignnone size-large wp-image-12852\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28-1024x159.png\\\" alt=\\\"\\\" width=\\\"640\\\" height=\\\"99\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28-1024x159.png 1024w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28-300x47.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28-768x119.png 768w\\\" sizes=\\\"(max-width: 640px) 100vw, 640px\\\" /></a></p>\\n<h1>Product interesses herkennen</h1>\\n<p>De bezoeker is vaak via een bepaalde campagne op de website gekomen en bezoekt daarna verschillende pagina&#8217;s op de website. We bekijken in dit voorbeeld een kleding webshop. Het is een webshop voor dames en heren kleding. Na één klik wordt al duidelijk dat deze persoon op zoek is naar dameskleding. Op onze supportpagina vind je een <a href=\\\"https://www.humanswitch.io/support/knowledgebase/product-interesses-configureren-iqnomy/\\\">voorbeeld case en demo voor het inrichten van deze interesses</a>.</p>\\n<p>Tijdens het bezoek worden de interesses duidelijk:</p>\\n<ul>\\n<li>Dameskleding</li>\\n<li>Trui</li>\\n<li>Sweat-shirt</li>\\n<li>V-hals</li>\\n<li>Kleur: Zwart</li>\\n<li>Merkvoorkeur</li>\\n<li>Prijscategorie: tot 30 euro</li>\\n</ul>\\n<p>Iedere unieke bezoeker in de webshop heeft een unieke combinatie van interesses. Deze interesses gebruik je om content aan te passen aan de bezoeker.</p>\\n<h1>Personaliseren met productinteresses</h1>\\n<p>Met deze data van anonieme bezoekers kun je verschillende vormen van personalisatie gaan toepassen.</p>\\n<ul>\\n<li>Banner personalisatie</li>\\n<li>Product recommendation</li>\\n<li><a href=\\\"http://www.humanswitch.io/blog/2017/09/11/plaats-gepersonaliseerde-lead-generatie-popup/\\\">Popup personalisatie</a></li>\\n<li><a href=\\\"http://www.humanswitch.io/blog/2017/03/17/personalisatie-toepassen-email-marketing/\\\">Email personalisatie</a></li>\\n</ul>\\n<p>Een banner personaliseren is vaak een eerste gemakkelijke stap in personalisatie. Met IQNOMY is het mogelijk om gepersonaliseerde banners te tonen. Technisch hoeft er niks te gebeuren. Het script dat je hebt geplaatst op de website om de bezoeker te volgen, verzorgt ook de personalisatie.  Via de rapportages in het IQNOMY platform krijg je een duidelijk beeld van de interesses van je bezoekers. De grootste groepen personaliseer je het eerste. Vaak is er al een banner beschikbaar voor deze locatie en deze kun je direct inzetten. Als er nog een banner gemaakt moet worden, dan kun je al starten met de reeds beschikbare banners en plaatst je de nieuwe banner er later gemakkelijk bij.</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-10.06.53.png\\\"><img class=\\\"alignnone wp-image-12862\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-10.06.53.png\\\" alt=\\\"\\\" width=\\\"284\\\" height=\\\"224\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-10.06.53.png 716w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-10.06.53-300x236.png 300w\\\" sizes=\\\"(max-width: 284px) 100vw, 284px\\\" /></a></p>\\n<p>Personalisatie op basis van de grootste categorie leidt al direct tot een hogere CTR en conversie. Gemiddeld leidt het personaliseren van de homepage banner tot een 2x hogere CTR en 1,3x hogere conversie via deze banner.</p>\\n<p>&nbsp;</p>\\n<hr style=\\\"color: #fc6d6d;\\\" />\\n<p><img class=\\\"alignleft wp-image-3121 size-thumbnail\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-150x150.jpg\\\" alt=\\\"Christian Vriens HumanSwitch IQNOMY\\\" width=\\\"150\\\" height=\\\"150\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-150x150.jpg 150w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-300x300.jpg 300w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-250x250.jpg 250w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-174x174.jpg 174w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2.jpg 960w\\\" sizes=\\\"(max-width: 150px) 100vw, 150px\\\" />Heb je vragen of wil je snel aan de slag met webshop personalisatie? Neem contact op met Christian Vriens om de mogelijkheden te bespreken.</p>\\n<p>Bel naar 0133031160 of mail naar <a href=\\\"mailto:christian@humanswitch.io\\\">christian@humanswitch.io</a></p>\\n<hr style=\\\"color: #fc6d6d;\\\" />\\n\",\n          \"protected\": false\n        },\n        \"excerpt\": {\n          \"rendered\": \"<p>95% van je bezoekers is anoniem! En meestal is voor de online marketeer 100% van de webshop bezoekers anoniem tot het moment dat de koop wordt gesloten. Zou het niet mooi zijn als je de anonieme bezoeker toch kent. Het IQNOMY platform zorgt ervoor dat je ook anonieme bezoekers kunt helpen door de website optimaal<a href=\\\"https://www.humanswitch.io/blog/2017/12/19/banner-personalisatie-met-interesses-van-anonieme-webshop-bezoekers/\\\">[&#8230;]</a></p>\\n\",\n          \"protected\": false\n        },\n        \"map\": {\n          \"geolocation\": {\n            \"lat\": 51.5877343,\n            \"lon\": 5.0048213\n          },\n          \"distance\": null,\n          \"zoomLevel\": 3\n        },\n        \"author\": 22,\n        \"featured_media\": 12842,\n        \"comment_status\": \"closed\",\n        \"ping_status\": \"closed\",\n        \"sticky\": false,\n        \"template\": \"\",\n        \"format\": \"standard\",\n        \"meta\": [],\n        \"categories\": [\n          183\n        ],\n        \"tags\": [],\n        \"_links\": {\n          \"self\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/12832\"\n            }\n          ],\n          \"collection\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts\"\n            }\n          ],\n          \"about\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/types/post\"\n            }\n          ],\n          \"author\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/users/22\"\n            }\n          ],\n          \"replies\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/comments?post=12832\"\n            }\n          ],\n          \"version-history\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/12832/revisions\"\n            }\n          ],\n          \"wp:featuredmedia\": [\n            {\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media/12842\"\n            }\n          ],\n          \"wp:attachment\": [\n            {\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media?parent=12832\"\n            }\n          ],\n          \"wp:term\": [\n            {\n              \"taxonomy\": \"category\",\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/categories?post=12832\"\n            },\n            {\n              \"taxonomy\": \"post_tag\",\n              \"embeddable\": true,\n              \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/tags?post=12832\"\n            }\n          ],\n          \"curies\": [\n            {\n              \"name\": \"wp\",\n              \"href\": \"https://api.w.org/{rel}\",\n              \"templated\": true\n            }\n          ]\n        }\n      }\n    }\n    "
+						},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}/resource",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}",
+								"resource"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Returns a resource by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}/resource/{{resourceId}}",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}",
+								"resource",
+								"{{resourceId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update a resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 204\"] = responseCode.code === 204;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"12900\",\n    \"properties\": {\n        \"id\": 12900,\n        \"date\": \"2017-12-19T13:58:49\",\n        \"date_gmt\": \"2017-12-19T12:58:49\",\n        \"guid\": {\n            \"rendered\": \"http://www.humanswitch.io/?p=12832\"\n        },\n        \"modified\": \"2017-12-20T10:29:57\",\n        \"modified_gmt\": \"2017-12-20T09:29:57\",\n        \"slug\": \"banner-personalisatie-met-interesses-van-anonieme-webshop-bezoekers\",\n        \"status\": \"publish\",\n        \"type\": \"post\",\n        \"link\": \"https://www.humanswitch.io/blog/2017/12/19/banner-personalisatie-met-interesses-van-anonieme-webshop-bezoekers/\",\n        \"title\": {\n            \"rendered\": \"Banner personalisation\"\n        },\n        \"content\": {\n            \"rendered\": \"<h2>95% van je bezoekers is anoniem! En meestal is voor de online marketeer 100% van de webshop bezoekers anoniem tot het moment dat de koop wordt gesloten. Zou het niet mooi zijn als je de anonieme bezoeker toch kent. Het IQNOMY platform zorgt ervoor dat je ook anonieme bezoekers kunt helpen door de website optimaal voor ze in te richten met personalisatie.</h2>\\n<p>Bij personaliseren op je website zorg je ervoor dat content past bij de interesses van je bezoeker. Het aanpassen van een banner op basis van een interesse leidt al tot een<strong> 2x hogere CTR</strong> van deze banner. De bezoeker kan de juiste producten gemakkelijker vinden en de conversie zal hoger zijn. Hoe werkt dit?</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51.png\\\"><img class=\\\"alignnone wp-image-12842\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51.png\\\" alt=\\\"\\\" width=\\\"428\\\" height=\\\"303\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51.png 948w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51-300x213.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.21.51-768x544.png 768w\\\" sizes=\\\"(max-width: 428px) 100vw, 428px\\\" /></a></p>\\n<p>Een bezoeker op de website wordt herkend op basis van een uniek nummer dat wordt opgeslagen in een cookie. De naam van de anonieme bezoeker is niet bekend, maar je kunt nu wel alle gebeurtenissen op de website registreren bij deze unieke bezoeker. Dit resulteert in een customer journey voor deze bezoeker. Al tijdens het eerste bezoek weet je al veel van deze bezoeker. Waar zit iemand in de verkoopfunnel, welke producten worden bekeken, wat wordt er in het winkelwagentje gestopt en wat zijn de producteigenschappen die deze bezoeker interessant vindt.</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28.png\\\"><img class=\\\"alignnone size-large wp-image-12852\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28-1024x159.png\\\" alt=\\\"\\\" width=\\\"640\\\" height=\\\"99\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28-1024x159.png 1024w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28-300x47.png 300w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-09.17.28-768x119.png 768w\\\" sizes=\\\"(max-width: 640px) 100vw, 640px\\\" /></a></p>\\n<h1>Product interesses herkennen</h1>\\n<p>De bezoeker is vaak via een bepaalde campagne op de website gekomen en bezoekt daarna verschillende pagina&#8217;s op de website. We bekijken in dit voorbeeld een kleding webshop. Het is een webshop voor dames en heren kleding. Na één klik wordt al duidelijk dat deze persoon op zoek is naar dameskleding. Op onze supportpagina vind je een <a href=\\\"https://www.humanswitch.io/support/knowledgebase/product-interesses-configureren-iqnomy/\\\">voorbeeld case en demo voor het inrichten van deze interesses</a>.</p>\\n<p>Tijdens het bezoek worden de interesses duidelijk:</p>\\n<ul>\\n<li>Dameskleding</li>\\n<li>Trui</li>\\n<li>Sweat-shirt</li>\\n<li>V-hals</li>\\n<li>Kleur: Zwart</li>\\n<li>Merkvoorkeur</li>\\n<li>Prijscategorie: tot 30 euro</li>\\n</ul>\\n<p>Iedere unieke bezoeker in de webshop heeft een unieke combinatie van interesses. Deze interesses gebruik je om content aan te passen aan de bezoeker.</p>\\n<h1>Personaliseren met productinteresses</h1>\\n<p>Met deze data van anonieme bezoekers kun je verschillende vormen van personalisatie gaan toepassen.</p>\\n<ul>\\n<li>Banner personalisatie</li>\\n<li>Product recommendation</li>\\n<li><a href=\\\"http://www.humanswitch.io/blog/2017/09/11/plaats-gepersonaliseerde-lead-generatie-popup/\\\">Popup personalisatie</a></li>\\n<li><a href=\\\"http://www.humanswitch.io/blog/2017/03/17/personalisatie-toepassen-email-marketing/\\\">Email personalisatie</a></li>\\n</ul>\\n<p>Een banner personaliseren is vaak een eerste gemakkelijke stap in personalisatie. Met IQNOMY is het mogelijk om gepersonaliseerde banners te tonen. Technisch hoeft er niks te gebeuren. Het script dat je hebt geplaatst op de website om de bezoeker te volgen, verzorgt ook de personalisatie.  Via de rapportages in het IQNOMY platform krijg je een duidelijk beeld van de interesses van je bezoekers. De grootste groepen personaliseer je het eerste. Vaak is er al een banner beschikbaar voor deze locatie en deze kun je direct inzetten. Als er nog een banner gemaakt moet worden, dan kun je al starten met de reeds beschikbare banners en plaatst je de nieuwe banner er later gemakkelijk bij.</p>\\n<p><a href=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-10.06.53.png\\\"><img class=\\\"alignnone wp-image-12862\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-10.06.53.png\\\" alt=\\\"\\\" width=\\\"284\\\" height=\\\"224\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-10.06.53.png 716w, https://www.humanswitch.io/wp-content/uploads/2017/12/Screen-Shot-2017-12-19-at-10.06.53-300x236.png 300w\\\" sizes=\\\"(max-width: 284px) 100vw, 284px\\\" /></a></p>\\n<p>Personalisatie op basis van de grootste categorie leidt al direct tot een hogere CTR en conversie. Gemiddeld leidt het personaliseren van de homepage banner tot een 2x hogere CTR en 1,3x hogere conversie via deze banner.</p>\\n<p>&nbsp;</p>\\n<hr style=\\\"color: #fc6d6d;\\\" />\\n<p><img class=\\\"alignleft wp-image-3121 size-thumbnail\\\" src=\\\"https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-150x150.jpg\\\" alt=\\\"Christian Vriens HumanSwitch IQNOMY\\\" width=\\\"150\\\" height=\\\"150\\\" srcset=\\\"https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-150x150.jpg 150w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-300x300.jpg 300w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-250x250.jpg 250w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2-174x174.jpg 174w, https://www.humanswitch.io/wp-content/uploads/2016/05/christianProfiel2.jpg 960w\\\" sizes=\\\"(max-width: 150px) 100vw, 150px\\\" />Heb je vragen of wil je snel aan de slag met webshop personalisatie? Neem contact op met Christian Vriens om de mogelijkheden te bespreken.</p>\\n<p>Bel naar 0133031160 of mail naar <a href=\\\"mailto:christian@humanswitch.io\\\">christian@humanswitch.io</a></p>\\n<hr style=\\\"color: #fc6d6d;\\\" />\\n\",\n            \"protected\": false\n        },\n        \"excerpt\": {\n            \"rendered\": \"<p>95% van je bezoekers is anoniem! En meestal is voor de online marketeer 100% van de webshop bezoekers anoniem tot het moment dat de koop wordt gesloten. Zou het niet mooi zijn als je de anonieme bezoeker toch kent. Het IQNOMY platform zorgt ervoor dat je ook anonieme bezoekers kunt helpen door de website optimaal<a href=\\\"https://www.humanswitch.io/blog/2017/12/19/banner-personalisatie-met-interesses-van-anonieme-webshop-bezoekers/\\\">[&#8230;]</a></p>\\n\",\n            \"protected\": false\n        },\n        \"map\": {\n            \"geolocation\": {\n                \"lat\": 51.5877343,\n                \"lon\": 5.0048213\n            },\n            \"distance\": null,\n            \"zoomLevel\": 3\n        },\n        \"author\": 22,\n        \"featured_media\": 12842,\n        \"comment_status\": \"closed\",\n        \"ping_status\": \"closed\",\n        \"sticky\": false,\n        \"template\": \"\",\n        \"format\": \"standard\",\n        \"meta\": [],\n        \"categories\": [\n            183\n        ],\n        \"tags\": [],\n        \"_links\": {\n            \"self\": [\n                {\n                    \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/12832\"\n                }\n            ],\n            \"collection\": [\n                {\n                    \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts\"\n                }\n            ],\n            \"about\": [\n                {\n                    \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/types/post\"\n                }\n            ],\n            \"author\": [\n                {\n                    \"embeddable\": true,\n                    \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/users/22\"\n                }\n            ],\n            \"replies\": [\n                {\n                    \"embeddable\": true,\n                    \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/comments?post=12832\"\n                }\n            ],\n            \"version-history\": [\n                {\n                    \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/posts/12832/revisions\"\n                }\n            ],\n            \"wp:featuredmedia\": [\n                {\n                    \"embeddable\": true,\n                    \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media/12842\"\n                }\n            ],\n            \"wp:attachment\": [\n                {\n                    \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/media?parent=12832\"\n                }\n            ],\n            \"wp:term\": [\n                {\n                    \"taxonomy\": \"category\",\n                    \"embeddable\": true,\n                    \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/categories?post=12832\"\n                },\n                {\n                    \"taxonomy\": \"post_tag\",\n                    \"embeddable\": true,\n                    \"href\": \"https://www.humanswitch.io/wp-json/wp/v2/tags?post=12832\"\n                }\n            ],\n            \"curies\": [\n                {\n                    \"name\": \"wp\",\n                    \"href\": \"https://api.w.org/{rel}\",\n                    \"templated\": true\n                }\n            ]\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}/resource/{{resourceId}}",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}",
+								"resource",
+								"{{resourceId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "check if updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Resource is edited\"] = jsonData.properties.type === \"edited\";",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}/resource/{{resourceId}}",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}",
+								"resource",
+								"{{resourceId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 201;",
+									"",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"resourceId\", jsonData.id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"propertyName\":\"id\",\n    \"value\": \"12832\",\n    \"occurence\":\"SHOULD\"\n  }\n]"
+						},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}/resource/search?maxResults=10&debug=true",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}",
+								"resource",
+								"search"
+							],
+							"query": [
+								{
+									"key": "maxResults",
+									"value": "10",
+									"equals": true
+								},
+								{
+									"key": "debug",
+									"value": "true",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a resource",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 204\"] = responseCode.code === 204;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}/resource/{{resourceId}}",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}",
+								"resource",
+								"{{resourceId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check if deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"tests[\"Status code is 404\"] = responseCode.code === 404;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}/resource/{{resourceId}}",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}",
+								"resource",
+								"{{resourceId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 204\"] = responseCode.code === 204;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Check if deleted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"tests[\"Status code is 404\"] = responseCode.code === 404;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "https://myliquidsuite-api.iqnomy.com/api/liquidaccount/{{IQAccountId}}/resourcecollection/{{collectionId}}",
+							"protocol": "https",
+							"host": [
+								"myliquidsuite-api",
+								"iqnomy",
+								"com"
+							],
+							"path": [
+								"api",
+								"liquidaccount",
+								"{{IQAccountId}}",
+								"resourcecollection",
+								"{{collectionId}}"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
